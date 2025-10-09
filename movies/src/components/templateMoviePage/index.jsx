@@ -6,6 +6,8 @@ import ImageListItem from "@mui/material/ImageListItem";
 import { getMovieImages } from "../../api/tmdb-api";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from '../spinner'
+import IconButton from "@mui/material/IconButton";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 
 const TemplateMoviePage = ({ movie, children }) => {
     const { data, error, isPending, isError } = useQuery({
@@ -28,6 +30,7 @@ const TemplateMoviePage = ({ movie, children }) => {
     <>
       <MovieHeader movie={movie} />
 
+
       <Grid container spacing={5} style={{ padding: "15px" }}>
         <Grid size={{xs: 3}}>
           <div sx={{
@@ -35,6 +38,9 @@ const TemplateMoviePage = ({ movie, children }) => {
             flexWrap: "wrap",
             justifyContent: "space-around",
           }}>
+          
+
+
             <ImageList
                 sx={{
                     height: "100vh",

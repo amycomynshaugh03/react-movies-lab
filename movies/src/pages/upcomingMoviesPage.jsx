@@ -1,25 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import PageTemplate from "../components/templateMovieListPage";
 import { getUpcomingMovies } from "../api/tmdb-api";
-import PageTemplate from '../components/templateMovieListPage';
-import { useQuery } from '@tanstack/react-query';
-import Spinner from '../components/spinner';
-import AddToFavoritesIcon from '../components/cardIcons/addToFavourites';
+import Spinner from "../components/spinner";
+import IconButton from "@mui/material/IconButton";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 
 const UpcomingMoviesPage = () => {
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const { data: movies, error, isPending, isError } = useQuery({
-    queryKey: ['upcoming'],
-    queryFn: getUpcomingMovies, // returns an array directly
-  });
+  useEffect(() => {
+    getUpcomingMovies().then((movies) => {
+      setMovies(movies);
+      setLoading(false);
+    });
+  }, []);
 
-  if (isPending) return <Spinner />;
-  if (isError) return <h1>{error?.message || "Failed to fetch upcoming movies"}</h1>;
+  if (loading) return <Spinner />;
+
+  const handleAddToPlayList = (movie) => (
+    <IconButton>
+      <PlaylistAddIcon color="primary"  />
+    </IconButton>
+  );
 
   return (
     <PageTemplate
       title="Upcoming Movies"
-      movies={movies || []} // ensure fallback
-      action={(movie) => <AddToFavoritesIcon movie={movie} />}
+      movies={movies}
+      action={handleAddToPlayList}
     />
   );
 };
