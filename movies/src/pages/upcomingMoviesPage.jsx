@@ -4,10 +4,15 @@ import { getUpcomingMovies } from "../api/tmdb-api";
 import Spinner from "../components/spinner";
 import IconButton from "@mui/material/IconButton";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import { MoviesContext } from "../contexts/moviesContext";
+import { useContext } from "react";
+
 
 const UpcomingMoviesPage = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { addToMustWatch } = useContext(MoviesContext);
+
 
   useEffect(() => {
     getUpcomingMovies().then((movies) => {
@@ -18,11 +23,12 @@ const UpcomingMoviesPage = () => {
 
   if (loading) return <Spinner />;
 
-  const handleAddToPlayList = (movie) => (
-    <IconButton>
-      <PlaylistAddIcon color="primary"  />
-    </IconButton>
-  );
+ const handleAddToPlayList = (movie) => (
+  <IconButton onClick={() => addToMustWatch(movie)}>
+    <PlaylistAddIcon color="primary" />
+  </IconButton>
+);
+
 
   return (
     <PageTemplate
