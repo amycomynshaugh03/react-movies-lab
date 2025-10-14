@@ -107,3 +107,21 @@ export const getUpcomingMovies = () => {
       throw error;
     });
 };
+
+export const getTrendingToday = () => {
+  return fetch(
+    `https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.REACT_APP_TMDB_KEY}`
+  )
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .then((json) => json.results) 
+    .catch((error) => {
+      throw error;
+    });
+};
