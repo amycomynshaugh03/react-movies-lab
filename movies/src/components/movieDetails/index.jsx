@@ -5,6 +5,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import MonetizationIcon from "@mui/icons-material/MonetizationOn";
 import StarRate from "@mui/icons-material/StarRate";
 import NavigationIcon from "@mui/icons-material/Navigation";
+import LanguageIcon from "@mui/icons-material/Language";
 import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
 import Drawer from "@mui/material/Drawer";
@@ -60,14 +61,23 @@ const [drawerOpen, setDrawerOpen] = useState(false);
           label={`${movie.vote_average} (${movie.vote_count})`}
         />
         <Chip label={`Released: ${movie.release_date}`} />
+
+        <Chip icon={<LanguageIcon />}
+     label={`Original Language: ${movie.original_language.toUpperCase()}`}
+     sx={{ ...chip }}
+     color="default"
+   />
+
       </Paper>
 
          <Paper component="ul" sx={{ ...root }}>
-        <Chip label="Production Countries" sx={{ ...chip }} color="primary" />
+        <Chip label="Production Countries" sx={{ ...chip }} color="default" />
         {movie.production_countries.map((c) => (
           <Chip key={c.name} label={c.name} sx={{ ...chip }} />
         ))}
       </Paper>
+
+    
       
            <Fab
         color="secondary"
