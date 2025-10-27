@@ -112,6 +112,19 @@ export default function FilterMoviesCard(props) {
         <MenuItem value="8">8+</MenuItem>
         </Select>
         </FormControl>
+
+        <FormControl sx={{ ...formControl }}>
+        <TextField
+        id="year-filter"
+        label="Release Year"
+        variant="filled"
+        value={props.yearFilter}
+        onChange={(e) => handleChange(e, "year", e.target.value)}
+        placeholder="e.g. 2023"
+        />
+        </FormControl>
+
+
       </CardContent>
       <CardMedia
         sx={{ height: 300 }}
