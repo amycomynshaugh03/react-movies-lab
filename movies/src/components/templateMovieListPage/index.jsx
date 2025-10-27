@@ -3,6 +3,8 @@ import Header from "../headerMovieList";
 import FilterCard from "../filterMoviesCard";
 import MovieList from "../movieList";
 import Grid from "@mui/material/Grid";
+import Fuse from "fuse.js";
+
 
 function MovieListPageTemplate({ movies, title, action }) {
   const [nameFilter, setNameFilter] = useState("");
@@ -14,19 +16,28 @@ function MovieListPageTemplate({ movies, title, action }) {
 
   const keywords = nameFilter.toLowerCase().trim().split(" ").filter(Boolean);
 
-  let displayedMovies = movies
+  const fuse = new Fuse(movies, {
+  keys: [
+    { name: "title", weight: 0.4 },
+    { name: "overview", weight: 0.3 },
+    { name: "director", weight: 0.2 },
+    { name: "actors", weight: 0.1 }
+  ],
+  threshold: 0.3,
+  ignoreLocation: true,
+  includeScore: true
+});
+
+ let displayedMovies = movies
     .filter((m) => (genreId > 0 ? m.genre_ids.includes(genreId) : true))
     .filter((m) => (ratingFilter === "0" ? true : m.vote_average >= Number(ratingFilter)))
-    .filter((m) => !yearFilter || m.release_date.startsWith(yearFilter))
-    .filter((m) => {
-      return keywords.every((kw) =>
-        m.title.toLowerCase().includes(kw) ||
-        (m.overview && m.overview.toLowerCase().includes(kw)) ||
-        (m.director && m.director.toLowerCase().includes(kw)) ||
-        (m.actors && m.actors.some(a => a.toLowerCase().includes(kw)))
-      );
-    })
-    .slice();
+    .filter((m) => !yearFilter || m.release_date.startsWith(yearFilter));
+
+  if (nameFilter.trim() !== "") {
+    const fuseResults = fuse.search(nameFilter);
+    displayedMovies = fuseResults.map(result => result.item);
+  }
+
 
   if (sortBy) {
     switch (sortBy) {
