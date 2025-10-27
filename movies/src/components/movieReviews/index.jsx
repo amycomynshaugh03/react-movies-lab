@@ -9,24 +9,16 @@ import Paper from "@mui/material/Paper";
 import { Link } from "react-router";
 import { getMovieReviews } from "../../api/tmdb-api";
 import { excerpt } from "../../util";
-import { useQuery } from "@tanstack/react-query";
-import Spinner from '../spinner'
 
 export default function MovieReviews({ movie }) {
-    const { data, error, isPending, isError } = useQuery({
-    queryKey: ['reviews', { id: movie.id }],
-    queryFn: getMovieReviews,
-  });
-  
-  if (isPending) {
-    return <Spinner />;
-  }
+  const [reviews, setReviews] = useState([]);
 
-  if (isError) {
-    return <h1>{error.message}</h1>;
-  }
-  
-  const reviews = data.results;
+  useEffect(() => {
+    getMovieReviews(movie.id).then((reviews) => {
+      setReviews(reviews);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <TableContainer component={Paper}>

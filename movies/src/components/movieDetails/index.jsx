@@ -9,7 +9,8 @@ import LanguageIcon from "@mui/icons-material/Language";
 import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
 import Drawer from "@mui/material/Drawer";
-import MovieReviews from "../movieReviews"
+import MovieReviews from "../movieReviews";
+
 
 
 const root = {
@@ -25,6 +26,8 @@ const chip = { margin: 0.5 };
 
 const MovieDetails = ({ movie }) => { 
 const [drawerOpen, setDrawerOpen] = useState(false);
+
+
 //const movie = props.movie
 
   return (
@@ -92,11 +95,11 @@ const [drawerOpen, setDrawerOpen] = useState(false);
         <NavigationIcon />
         Reviews
       </Fab>
+
       <Drawer anchor="top" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         <MovieReviews movie={movie} />
       </Drawer>
-
-      </>
+    </>
   );
 };
 export default MovieDetails ;
