@@ -12,12 +12,21 @@ function MovieListPageTemplate({ movies, title, action }) {
   const [sortBy, setSortBy] = useState("");
   const genreId = Number(genreFilter);
 
+  const keywords = nameFilter.toLowerCase().trim().split(" ").filter(Boolean);
+
   let displayedMovies = movies
-    .filter((m) => m.title.toLowerCase().includes(nameFilter.toLowerCase()))
     .filter((m) => (genreId > 0 ? m.genre_ids.includes(genreId) : true))
     .filter((m) => (ratingFilter === "0" ? true : m.vote_average >= Number(ratingFilter)))
     .filter((m) => !yearFilter || m.release_date.startsWith(yearFilter))
-    .slice(); 
+    .filter((m) => {
+      return keywords.every((kw) =>
+        m.title.toLowerCase().includes(kw) ||
+        (m.overview && m.overview.toLowerCase().includes(kw)) ||
+        (m.director && m.director.toLowerCase().includes(kw)) ||
+        (m.actors && m.actors.some(a => a.toLowerCase().includes(kw)))
+      );
+    })
+    .slice();
 
   if (sortBy) {
     switch (sortBy) {
@@ -41,6 +50,7 @@ function MovieListPageTemplate({ movies, title, action }) {
         break;
       case "runtime":
         displayedMovies.sort((a, b) => (b.runtime || 0) - (a.runtime || 0));
+        break;
       default:
         break;
     }
