@@ -96,6 +96,22 @@ export default function FilterMoviesCard(props) {
             })}
           </Select>
         </FormControl>
+
+        <FormControl sx={{ ...formControl }}>
+         <InputLabel id="rating-label">Minimum Rating</InputLabel>
+         <Select
+        labelId="rating-label"
+        id="rating-select"
+        value={props.ratingFilter}
+        onChange={(e) => handleChange(e, "rating", e.target.value)}
+        >
+        <MenuItem value="0">All</MenuItem>
+        <MenuItem value="5">5+</MenuItem>
+        <MenuItem value="6">6+</MenuItem>
+        <MenuItem value="7">7+</MenuItem>
+        <MenuItem value="8">8+</MenuItem>
+        </Select>
+        </FormControl>
       </CardContent>
       <CardMedia
         sx={{ height: 300 }}
