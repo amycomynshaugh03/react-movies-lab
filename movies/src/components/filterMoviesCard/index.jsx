@@ -109,6 +109,25 @@ export default function FilterMoviesCard(props) {
           />
         </FormControl>
 
+        <FormControl sx={{ ...formControl }}>
+  <TextField
+    select
+    label="Sort By"
+    variant="filled"
+    value={props.sortBy || ""}
+    onChange={(e) => props.onUserInput("sort", e.target.value)}
+  >
+    <MenuItem value="">None</MenuItem>
+    <MenuItem value="title-asc">Title (A-Z)</MenuItem>
+    <MenuItem value="title-desc">Title (Z-A)</MenuItem>
+    <MenuItem value="release-desc">Release Date (Newest → Oldest)</MenuItem>
+    <MenuItem value="release-asc">Release Date (Oldest → Newest)</MenuItem>
+    <MenuItem value="rating-asc">Rating (Low → High)</MenuItem>
+    <MenuItem value="rating-desc">Rating (High → Low)</MenuItem>
+  </TextField>
+</FormControl>
+
+
       </CardContent>
 
       <CardMedia
