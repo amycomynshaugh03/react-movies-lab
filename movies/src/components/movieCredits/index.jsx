@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getMovieCredits } from "../../api/tmdb-api";
 import { Link } from "react-router";
+import Spinner from '../spinner';
 
 const MovieCredits = ({ movieId }) => {
   const { data, isLoading, isError, error } = useQuery({
@@ -12,7 +13,7 @@ const MovieCredits = ({ movieId }) => {
   if (isLoading) return <Spinner />;
   if (isError) return <p>Error: {error.message}</p>;
 
-  const imageBase = "https://image.tmdb.org/t/p/w185"; 
+ 
 
   return (
     <div>
