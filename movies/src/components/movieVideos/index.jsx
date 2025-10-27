@@ -6,12 +6,12 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
 const MovieVideos = ({ movieId }) => {
-  const { data, error, isPending, isError } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["videos", { id: movieId }],
     queryFn: getMovieVideos,
   });
 
-  if (isPending) return <Spinner />;
+  if (isLoading) return <Spinner />;
   if (isError) return <h1>{error.message}</h1>;
 
   const videos = data.results.filter((v) => v.site === "YouTube");

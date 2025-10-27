@@ -17,11 +17,6 @@ import TopRatedMoviesPage from "./pages/topRatedMoviesPage";
 import NowPlayingMoviesPage from "./pages/nowPlayingMoviesPage";
 import ActorPage from "./pages/actorPage";
 
-
-
-
-
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -31,8 +26,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-
 
 const App = () => {
   return (

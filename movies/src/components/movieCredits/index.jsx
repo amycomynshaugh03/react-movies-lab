@@ -4,15 +4,15 @@ import { getMovieCredits } from "../../api/tmdb-api";
 import { Link } from "react-router";
 
 const MovieCredits = ({ movieId }) => {
-  const { data: credits, error, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["movieCredits", { id: movieId }],
     queryFn: () => getMovieCredits(movieId),
   });
 
-  if (isLoading) return <p>Loading credits...</p>;
+  if (isLoading) return <Spinner />;
   if (isError) return <p>Error: {error.message}</p>;
 
-  const imageBase = "https://image.tmdb.org/t/p/w185"; // small poster size
+  const imageBase = "https://image.tmdb.org/t/p/w185"; 
 
   return (
     <div>
