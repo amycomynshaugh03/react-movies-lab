@@ -39,6 +39,8 @@ function MovieListPageTemplate({ movies, title, action }) {
       case "rating-desc":
         displayedMovies.sort((a, b) => b.vote_average - a.vote_average);
         break;
+      case "runtime":
+        displayedMovies.sort((a, b) => (b.runtime || 0) - (a.runtime || 0));
       default:
         break;
     }
