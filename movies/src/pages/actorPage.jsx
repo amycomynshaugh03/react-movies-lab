@@ -1,47 +1,72 @@
 import React from "react";
-import { useLocation, useParams } from "react-router";
+import { useParams, Link } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { getPersonDetails } from "../api/tmdb-api";
+import { getPersonDetails, getPersonMovieCredits } from "../api/tmdb-api";
 import Spinner from "../components/spinner";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
 
 const ActorPage = () => {
   const { id } = useParams();
-  const { data, error, isPending, isError } = useQuery({
+
+  // Fetch actor details
+  const { data: actor, isLoading: loadingActor, isError: errorActor } = useQuery({
     queryKey: ["actor", { id }],
     queryFn: getPersonDetails,
   });
 
-  if (isPending) return <Spinner />;
-  if (isError) return <h1>{error.message}</h1>;
+  // Fetch actor movie credits
+  const { data: movieCredits, isLoading: loadingMovies, isError: errorMovies } = useQuery({
+    queryKey: ["actorMovies", { id }],
+    queryFn: getPersonMovieCredits,
+  });
 
-  const actor = data;
+  if (loadingActor || loadingMovies) return <Spinner />;
+  if (errorActor || errorMovies) return <p>Error loading actor info.</p>;
 
   return (
-    <Paper sx={{ padding: 2, margin: 2 }}>
-      <Box sx={{ display: "flex", gap: 3 }}>
+    <div style={{ padding: "16px" }}>
+      {/* Actor info */}
+      <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
         {actor.profile_path && (
           <img
             src={`https://image.tmdb.org/t/p/w300${actor.profile_path}`}
             alt={actor.name}
-            style={{ borderRadius: "1em" }}
+            style={{ width: "200px", borderRadius: "8px" }}
           />
         )}
-        <Box>
-          <Typography variant="h4" gutterBottom>
-            {actor.name}
-          </Typography>
-          <Typography variant="subtitle1">
+        <div>
+          <h2>{actor.name}</h2>
+          <p>
             Born: {actor.birthday} {actor.place_of_birth && `in ${actor.place_of_birth}`}
-          </Typography>
-          <Typography variant="body1" sx={{ mt: 2 }}>
-            {actor.biography || "No biography available."}
-          </Typography>
-        </Box>
-      </Box>
-    </Paper>
+          </p>
+          <p>{actor.biography || "No biography available."}</p>
+        </div>
+      </div>
+
+      {/* Actor movies */}
+      {movieCredits?.cast?.length > 0 && (
+        <>
+          <h3 style={{ marginTop: "24px" }}>Appears in:</h3>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+            {movieCredits.cast.slice(0, 8).map((m) => (
+              <Link key={m.credit_id} to={`/movies/${m.id}`} style={{ textDecoration: "none" }}>
+                <div style={{ width: "150px", textAlign: "center" }}>
+                  {m.poster_path ? (
+                    <img
+                      src={`https://image.tmdb.org/t/p/w200${m.poster_path}`}
+                      alt={m.title}
+                      style={{ width: "100%", borderRadius: "4px" }}
+                    />
+                  ) : (
+                    <p>No image</p>
+                  )}
+                  <p>{m.title}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 
