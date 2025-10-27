@@ -6,8 +6,7 @@ import ImageListItem from "@mui/material/ImageListItem";
 import { getMovieImages } from "../../api/tmdb-api";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from '../spinner'
-import IconButton from "@mui/material/IconButton";
-import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+
 
 const TemplateMoviePage = ({ movie, children }) => {
   const { data, isLoading, isError, error } = useQuery({
