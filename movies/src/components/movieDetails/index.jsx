@@ -12,10 +12,7 @@ import Drawer from "@mui/material/Drawer";
 import MovieReviews from "../movieReviews";
 import MovieCredits from "../movieCredits"; 
 import MovieVideos from "../movieVideos";
-
-
-
-
+import SimilarMovies from "../similarMovies";
 
 const root = {
     display: "flex",
@@ -31,6 +28,7 @@ const chip = { margin: 0.5 };
 const MovieDetails = ({ movie }) => { 
 const [drawerOpen, setDrawerOpen] = useState(false);
 const [creditsDrawerOpen, setCreditsDrawerOpen] = useState(false); 
+
 
 
 //const movie = props.movie
@@ -85,6 +83,7 @@ const [creditsDrawerOpen, setCreditsDrawerOpen] = useState(false);
         ))}
       </Paper>
 
+      <SimilarMovies movieId={movie.id} />
       <MovieVideos movieId={movie.id} />
 
 
@@ -117,7 +116,6 @@ const [creditsDrawerOpen, setCreditsDrawerOpen] = useState(false);
         <NavigationIcon />
         Credits
       </Fab>
-
 
       <Drawer anchor="top" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         <MovieReviews movie={movie} />

@@ -249,3 +249,23 @@ export const getPersonMovieCredits = ({ queryKey }) => {
     });
 };
 
+export const getSimilarMovies = ({ queryKey }) => {
+  const [, idPart] = queryKey;
+  const { id } = idPart;
+  return fetch(
+    `https://api.themoviedb.org/3/movie/${id}/similar?api_key=${import.meta.env.VITE_TMDB_KEY}`
+  )
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .then((json) => json.results) 
+    .catch((error) => {
+      throw error;
+    });
+};
+

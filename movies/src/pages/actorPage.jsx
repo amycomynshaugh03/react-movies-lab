@@ -7,13 +7,12 @@ import Spinner from "../components/spinner";
 const ActorPage = () => {
   const { id } = useParams();
 
-  // Fetch actor details
+
   const { data: actor, isLoading: loadingActor, isError: errorActor } = useQuery({
     queryKey: ["actor", { id }],
     queryFn: getPersonDetails,
   });
 
-  // Fetch actor movie credits
   const { data: movieCredits, isLoading: loadingMovies, isError: errorMovies } = useQuery({
     queryKey: ["actorMovies", { id }],
     queryFn: getPersonMovieCredits,
@@ -24,7 +23,7 @@ const ActorPage = () => {
 
   return (
     <div style={{ padding: "16px" }}>
-      {/* Actor info */}
+      {}
       <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
         {actor.profile_path && (
           <img
@@ -42,7 +41,7 @@ const ActorPage = () => {
         </div>
       </div>
 
-      {/* Actor movies */}
+      {}
       {movieCredits?.cast?.length > 0 && (
         <>
           <h3 style={{ marginTop: "24px" }}>Appears in:</h3>
