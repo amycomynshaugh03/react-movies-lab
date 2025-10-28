@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { MoviesContext } from "../../contexts/moviesContext";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -10,20 +10,21 @@ import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
-import { Rating } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import { Grid, Grow } from "@mui/material";
+import { Rating, Snackbar, Alert, IconButton, Grid, Grow } from "@mui/material";
 import { Link } from "react-router";
 import img from "../images/film-poster-placeholder.png";
 
 export default function MovieCard({ movie, action, isPlaylistPage = false, showPlaylistButton = true }) {
-  const { favorites, playlist, addToPlaylist, removeFromPlaylist } = useContext(MoviesContext);
+  const { playlist, addToPlaylist, removeFromPlaylist } = useContext(MoviesContext);
   const isInPlaylist = playlist.find((m) => m.id === movie.id);
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handlePlaylistAction = (e) => {
     e.preventDefault();
     if (isPlaylistPage) removeFromPlaylist(movie);
     else isInPlaylist ? removeFromPlaylist(movie) : addToPlaylist(movie);
+    if (!isPlaylistPage) setOpenSnackbar(true);
   };
 
   return (
@@ -40,7 +41,7 @@ export default function MovieCard({ movie, action, isPlaylistPage = false, showP
             "&:hover": { transform: "translateY(-10px)", boxShadow: 8 },
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between"
+            justifyContent: "space-between",
           }}
         >
           <CardMedia
@@ -58,7 +59,7 @@ export default function MovieCard({ movie, action, isPlaylistPage = false, showP
                 fontStyle: "italic",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
-                textOverflow: "ellipsis"
+                textOverflow: "ellipsis",
               }}
               title={movie.title}
             >
@@ -80,8 +81,15 @@ export default function MovieCard({ movie, action, isPlaylistPage = false, showP
           <CardActions sx={{ justifyContent: "space-between" }}>
             {action && action(movie)}
             {showPlaylistButton && (
-              <IconButton sx={{ "&:hover": { transform: "scale(1.2)", transition: "0.2s" } }} onClick={handlePlaylistAction}>
-                {isPlaylistPage ? <DeleteIcon color="error" /> : <PlaylistAddIcon color={isInPlaylist ? "primary" : "default"} />}
+              <IconButton
+                sx={{ "&:hover": { transform: "scale(1.2)", transition: "0.2s" } }}
+                onClick={handlePlaylistAction}
+              >
+                {isPlaylistPage ? (
+                  <DeleteIcon color="error" />
+                ) : (
+                  <PlaylistAddIcon color={isInPlaylist ? "primary" : "default"} />
+                )}
               </IconButton>
             )}
             <Link to={`/movies/${movie.id}`} style={{ textDecoration: "none" }}>
@@ -93,8 +101,8 @@ export default function MovieCard({ movie, action, isPlaylistPage = false, showP
                   color: "white",
                   "&:hover": {
                     background: "linear-gradient(90deg, #00aaff, #6ec1e4)",
-                    transform: "scale(1.05)"
-                  }
+                    transform: "scale(1.05)",
+                  },
                 }}
               >
                 More Info
@@ -103,6 +111,17 @@ export default function MovieCard({ movie, action, isPlaylistPage = false, showP
           </CardActions>
         </Card>
       </Grow>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={2000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert severity="success" sx={{ width: "100%" }}>
+          Added to Playlist!
+        </Alert>
+      </Snackbar>
     </Grid>
   );
 }
