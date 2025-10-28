@@ -35,6 +35,7 @@ const UpcomingMoviesPage = () => {
       title="Upcoming Movies"
       movies={movies}
       action={handleAddToPlayList}
+      showPlaylistButton={false}  
     />
   );
 };
