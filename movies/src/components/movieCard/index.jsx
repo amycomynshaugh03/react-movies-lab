@@ -6,9 +6,8 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import IconButton from "@mui/material/IconButton";
@@ -16,9 +15,8 @@ import { Grid } from "@mui/material";
 import { Link } from "react-router";
 import img from "../images/film-poster-placeholder.png";
 
-export default function MovieCard({ movie, action, isPlaylistPage = false }) {
-  const { favorites, addToFavorites, playlist, addToPlaylist, removeFromPlaylist } = useContext(MoviesContext);
-  const isFavorite = favorites.includes(movie.id);
+export default function MovieCard({ movie, action, isPlaylistPage = false, showPlaylistButton = true }) {
+  const { favorites, playlist, addToPlaylist, removeFromPlaylist } = useContext(MoviesContext);
   const isInPlaylist = playlist.find((m) => m.id === movie.id);
 
   const handlePlaylistAction = (e) => {
@@ -49,7 +47,6 @@ export default function MovieCard({ movie, action, isPlaylistPage = false }) {
           image={movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : img}
           alt={movie.title}
         />
-
         <CardContent sx={{ flexGrow: 1, textAlign: "center" }}>
           <Typography
             variant="h6"
@@ -65,7 +62,6 @@ export default function MovieCard({ movie, action, isPlaylistPage = false }) {
           >
             {movie.title}
           </Typography>
-
           <Grid container spacing={1} justifyContent="center" sx={{ mt: 1 }}>
             <Grid item sx={{ display: "flex", alignItems: "center" }}>
               <CalendarIcon fontSize="small" sx={{ mr: 0.5 }} />
@@ -77,12 +73,13 @@ export default function MovieCard({ movie, action, isPlaylistPage = false }) {
             </Grid>
           </Grid>
         </CardContent>
-
         <CardActions sx={{ justifyContent: "space-between" }}>
           {action && action(movie)}
-          <IconButton sx={{ "&:hover": { transform: "scale(1.2)", transition: "0.2s" } }} onClick={handlePlaylistAction}>
-            {isPlaylistPage ? <DeleteIcon color="error" /> : <PlaylistAddIcon color={isInPlaylist ? "primary" : "default"} />}
-          </IconButton>
+          {showPlaylistButton && (
+            <IconButton sx={{ "&:hover": { transform: "scale(1.2)", transition: "0.2s" } }} onClick={handlePlaylistAction}>
+              {isPlaylistPage ? <DeleteIcon color="error" /> : <PlaylistAddIcon color={isInPlaylist ? "primary" : "default"} />}
+            </IconButton>
+          )}
           <Link to={`/movies/${movie.id}`} style={{ textDecoration: "none" }}>
             <Button
               variant="contained"

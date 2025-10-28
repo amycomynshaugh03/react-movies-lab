@@ -5,8 +5,7 @@ import MovieList from "../movieList";
 import Grid from "@mui/material/Grid";
 import Fuse from "fuse.js";
 
-
-function MovieListPageTemplate({ movies, title, action }) {
+function MovieListPageTemplate({ movies, title, action, showPlaylistButton = true }) {
   const [nameFilter, setNameFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("0");
   const [ratingFilter, setRatingFilter] = useState("0");
@@ -17,27 +16,26 @@ function MovieListPageTemplate({ movies, title, action }) {
   const keywords = nameFilter.toLowerCase().trim().split(" ").filter(Boolean);
 
   const fuse = new Fuse(movies, {
-  keys: [
-    { name: "title", weight: 0.4 },
-    { name: "overview", weight: 0.3 },
-    { name: "director", weight: 0.2 },
-    { name: "actors", weight: 0.1 }
-  ],
-  threshold: 0.3,
-  ignoreLocation: true,
-  includeScore: true
-});
+    keys: [
+      { name: "title", weight: 0.4 },
+      { name: "overview", weight: 0.3 },
+      { name: "director", weight: 0.2 },
+      { name: "actors", weight: 0.1 }
+    ],
+    threshold: 0.3,
+    ignoreLocation: true,
+    includeScore: true
+  });
 
- let displayedMovies = movies
+  let displayedMovies = movies
     .filter((m) => (genreId > 0 ? m.genre_ids.includes(genreId) : true))
     .filter((m) => (ratingFilter === "0" ? true : m.vote_average >= Number(ratingFilter)))
     .filter((m) => !yearFilter || m.release_date.startsWith(yearFilter));
 
   if (nameFilter.trim() !== "") {
     const fuseResults = fuse.search(nameFilter);
-    displayedMovies = fuseResults.map(result => result.item);
+    displayedMovies = fuseResults.map((result) => result.item);
   }
-
 
   if (sortBy) {
     switch (sortBy) {
@@ -95,7 +93,7 @@ function MovieListPageTemplate({ movies, title, action }) {
             sortBy={sortBy}
           />
         </Grid>
-        <MovieList action={action} movies={displayedMovies} />
+        <MovieList action={action} movies={displayedMovies} showPlaylistButton={showPlaylistButton} />
       </Grid>
     </Grid>
   );
