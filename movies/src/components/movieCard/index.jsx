@@ -10,6 +10,7 @@ import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
+import { Rating } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import { Grid, Grow } from "@mui/material";
 import { Link } from "react-router";
@@ -69,8 +70,10 @@ export default function MovieCard({ movie, action, isPlaylistPage = false, showP
                 <Typography variant="subtitle2">{movie.release_date}</Typography>
               </Grid>
               <Grid item sx={{ display: "flex", alignItems: "center" }}>
-                <StarRateIcon fontSize="small" sx={{ mr: 0.5, color: "#fbc02d" }} />
-                <Typography variant="subtitle2">{movie.vote_average.toFixed(1)}</Typography>
+                <Rating value={movie.vote_average / 2} precision={0.1} readOnly size="small" />
+                <Typography variant="subtitle2" sx={{ ml: 0.5 }}>
+                  {movie.vote_average.toFixed(1)}
+                </Typography>
               </Grid>
             </Grid>
           </CardContent>
